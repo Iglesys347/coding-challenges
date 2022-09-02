@@ -102,4 +102,4 @@ def xp_to_rank(xp):
             return rank["rank"]
 
 
-bot.run("MTAwOTA1NzgxODY4NDQyODMwOA.G1wAsz.XRVOqc5PvVXwEncyHySFXM4X-bmB60EWg-kgqE")
+bot.run("")
