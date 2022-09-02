@@ -1,0 +1,12 @@
+[
+    {
+        "rank": "Giga Chad",
+        "lower_bound": 1000,
+        "upper_bound": 9999999999999
+    },
+    {
+        "rank": "noob",
+        "lower_bound": 0,
+        "upper_bound": 10
+    }
+]
