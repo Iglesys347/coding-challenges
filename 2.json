@@ -1,0 +1,25 @@
+{
+    "name": "Odd and even sum.",
+    "desc": "Return the sum of the odd numbers and the sum of all the even numbers.",
+    "ex_inputs": [
+        "1",
+        "1 2 3 4",
+        "8 5 4 4"
+    ],
+    "ex_outputs": [
+        "1 0",
+        "4 6",
+        "5 16"
+    ],
+    "inputs": [
+        "1",
+        "1 2 3 4",
+        "8 5 4 4"
+    ],
+    "outputs": [
+        "1 0",
+        "4 6",
+        "5 16"
+    ],
+    "difficulty": "medium"
+}
