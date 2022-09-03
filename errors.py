@@ -1,3 +1,6 @@
+"""Module defining errors."""
+
+
 class SolutionFormatError(Exception):
     """Raised when the solution's format is not valid."""
 
@@ -8,6 +11,7 @@ class LanguageError(Exception):
 
 class RedisError(Exception):
     """Raised when error occur in Redis DB."""
+
 
 class DockerError(Exception):
     """Raised when error occur in Docker."""
