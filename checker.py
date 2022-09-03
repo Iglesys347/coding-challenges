@@ -37,7 +37,7 @@ def check_script(script_name, challenge):
         sock._sock.close()
         sock.close()
         try:
-            status = client.wait(container, timeout=10)
+            status = client.wait(container, timeout=20)
             status_code = status["StatusCode"]
         except:
             client.kill(container)

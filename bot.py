@@ -102,4 +102,8 @@ def xp_to_rank(xp):
             return rank["rank"]
 
 
-bot.run("")
+def run_bot():
+    # read bot token
+    with open(".token") as file:
+        token = file.read()
+    bot.run(token)
