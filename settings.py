@@ -1,3 +1,5 @@
+"""Project settings."""
+
 CHALLENGES_DIR = "./challenges/"
 DIFFICULTY_COLOR_MAP = {"easy": 0x00FF00,
                         "medium": 0xFF9900,
