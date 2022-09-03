@@ -1,6 +1,8 @@
+"""Checker module contains function to check the user's solution."""
+
+import os
 import docker
 from docker.errors import ImageNotFound
-import os
 
 from handler import DEFAULT_DIR
 
@@ -38,10 +40,10 @@ def check_script(script_name, challenge):
         sock.close()
         try:
             status = client.wait(container, timeout=20)
-            status_code = status["StatusCode"]
+            # status_code = status["StatusCode"]
         except:
             client.kill(container)
-            status_code = 137  # sigkill status code
+            # status_code = 137  # sigkill status code
         stdout = client.logs(container, stderr=False).decode()
         if stdout.endswith("\n"):
             stdout = stdout[:-1]
