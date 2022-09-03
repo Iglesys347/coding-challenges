@@ -1,4 +1,5 @@
 import redis
+from redis.exceptions import ConnectionError
 
 from errors import RedisError
 from settings import REDIS_DB, REDIS_HOST, REDIS_PORT, REDIS_HASH_KEY
@@ -7,6 +8,12 @@ from settings import REDIS_DB, REDIS_HOST, REDIS_PORT, REDIS_HASH_KEY
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT,
                            db=REDIS_DB, decode_responses=True)
 
+def check_db_running():
+    try:
+        ping_res = redis_client.ping()
+        return ping_res
+    except ConnectionError:
+        return False
 
 # Defining some usefull decorators
 def check_user_exists(func):

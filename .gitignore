@@ -1,6 +1,13 @@
 # Bot token
 .token
 
+# Redis save
+dump.rdb
+
+# Pipenv files
+Pipfile
+Pipfile.lock
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
