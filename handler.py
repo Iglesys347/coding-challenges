@@ -1,3 +1,5 @@
+"""Handler for user solution."""
+
 import os
 import re
 import uuid
@@ -22,14 +24,14 @@ class SolHandler():
         if lang == "":
             raise SolutionFormatError(
                 "The solution should begin with ```<language> and end with ```")
-        elif lang not in KNOWN_LANG:
+        if lang not in KNOWN_LANG:
             raise LanguageError("Unknown language.")
         script = "\n".join(result.split("\n")[1:])
 
         # generating random filename
         file_ext = [key for key, value in FILE_EXT.items() if value == lang][0]
         full_filename = self.filename+"."+file_ext
-        with open(DEFAULT_DIR+full_filename, "w") as file:
+        with open(DEFAULT_DIR+full_filename, "w", encoding="utf8") as file:
             file.write(script)
         return full_filename, lang
 
