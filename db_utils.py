@@ -1,3 +1,5 @@
+"""Module containing utils function to manipulate the DB."""
+
 import redis
 from redis.exceptions import ConnectionError
 
@@ -8,6 +10,7 @@ from settings import REDIS_DB, REDIS_HOST, REDIS_PORT, REDIS_HASH_KEY
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT,
                            db=REDIS_DB, decode_responses=True)
 
+
 def check_db_running():
     try:
         ping_res = redis_client.ping()
@@ -16,6 +19,8 @@ def check_db_running():
         return False
 
 # Defining some usefull decorators
+
+
 def check_user_exists(func):
     def inner(client, user_id, *args, **kargs):
         if not client.hexists(REDIS_HASH_KEY, user_id) and user_id is not None:
@@ -67,7 +72,7 @@ def remove_xp(client, user_id, xp):
 def reset_xp(client, user_id=None):
     """Set the xp to 0 of specified user or all users by default."""
     if user_id is None:
-        for user in get_users():
+        for user in get_users(client):
             reset_xp(user)
     return client.hset(REDIS_HASH_KEY, user_id, 0)
 
