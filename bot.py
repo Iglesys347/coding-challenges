@@ -1,16 +1,20 @@
+"""Discord bot command description."""
+
 import json
 import os
 from random import choice
 import discord
 from discord.ext import commands
+import redis
+
 from challenge import Challenge
 from errors import RedisError
 from db_utils import add_user, add_xp, get_user_xp
 from handler import SolHandler
 from checker import check_script
-import redis
 
-from settings import CHALLENGES_DIR, DIFFICULTY_COLOR_MAP, DIFFICULTY_XP_MAP, REDIS_DB, REDIS_HOST, REDIS_PORT, RANKS_FILE
+from settings import (CHALLENGES_DIR, DIFFICULTY_COLOR_MAP,
+                      DIFFICULTY_XP_MAP, REDIS_DB, REDIS_HOST, REDIS_PORT, RANKS_FILE)
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,8 +27,6 @@ redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT,
 bot = commands.Bot(commands.when_mentioned_or("!"), intents=intents,
                    description="Coding challenges Discord bot.")
 
-# TODO function that chekcs on bot load that redis is running.
-
 
 @bot.command(help="Select and start a random challenge.")
 async def challenge(ctx):
@@ -32,8 +34,9 @@ async def challenge(ctx):
         chal_id = choice(os.listdir(CHALLENGES_DIR)).split(".")[0]
         return Challenge(chal_id, CHALLENGES_DIR)
 
-    def check(m):
-        return m.author != bot.user and m.content.startswith("```") and m.channel == ctx.channel and m.author == ctx.author
+    def check(mess):
+        return mess.author != bot.user and mess.content.startswith("```") \
+            and mess.channel == ctx.channel and mess.author == ctx.author
 
     chal = random_challenge()
 
@@ -74,8 +77,8 @@ async def challenge(ctx):
 async def xp(ctx):
     user_id = ctx.message.author.id
     try:
-        xp = get_user_xp(redis_client, user_id)
-        await ctx.send(f"You currently have {xp} points of experience.")
+        xp_amount = get_user_xp(redis_client, user_id)
+        await ctx.send(f"You currently have {xp_amount} points of experience.")
     except RedisError:
         await ctx.send("You haven't completed any challenge! You have 0 points of experience.")
 
@@ -84,26 +87,27 @@ async def xp(ctx):
 async def rank(ctx):
     user_id = ctx.message.author.id
     try:
-        xp = get_user_xp(redis_client, user_id)
-        rank = xp_to_rank(xp)
+        xp_amount = get_user_xp(redis_client, user_id)
+        rank_name = xp_to_rank(xp_amount)
         if rank is not None:
-            await ctx.send(f"Your are currently a {rank}.")
+            await ctx.send(f"Your are currently a {rank_name}.")
         else:
             await ctx.send("Sorry, your rank is unknown.")
     except RedisError:
         await ctx.send("You haven't completed any challenge! You don't have a rank.")
 
 
-def xp_to_rank(xp):
-    with open(RANKS_FILE) as file:
+def xp_to_rank(xp_amount):
+    with open(RANKS_FILE, "r", encoding="utf8") as file:
         ranks = json.load(file)
-    for rank in ranks:
-        if rank["lower_bound"] < xp < rank["upper_bound"]:
-            return rank["rank"]
+    for rank_name in ranks:
+        if rank_name["lower_bound"] < xp_amount < rank_name["upper_bound"]:
+            return rank_name["rank"]
+    return None
 
 
 def run_bot():
     # read bot token
-    with open(".token") as file:
+    with open(".token", "r", encoding="utf8") as file:
         token = file.read()
     bot.run(token)
