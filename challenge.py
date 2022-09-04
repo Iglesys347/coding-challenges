@@ -5,7 +5,7 @@ import json
 
 class Challenge():
     """Class representing a challenge.
-    
+
     Arguments
     ---------
     id : int
@@ -27,7 +27,7 @@ class Challenge():
         The list of inputs used to test the challenge solution.
     _outputs : list
         The list of outputs used to test the challenge solution.
-    
+
     Methods
     -------
     _read_chal_json(id, chal_folder)
@@ -54,12 +54,12 @@ class Challenge():
 
     def _read_chal_json(self, key):
         """Return challenge inforomations from its json file.
-        
+
         Parameters
         ----------
         key : str
             The key in the json file.
-        
+
         Returns
         -------
         str
@@ -71,18 +71,36 @@ class Challenge():
 
     @property
     def inputs(self):
-        """Generator for challenge inputs."""
+        """Generator for challenge inputs.
+
+        Yields
+        ------
+        str | int
+            The challenges inputs.
+        """
         for inp in self._inputs:
             yield inp
 
     @property
     def outputs(self):
-        """Generator for challenge outputs."""
+        """Generator for challenge outputs.
+
+        Yields
+        ------
+        str | int
+            The challenges outputs.
+        """
         for out in self._outputs:
             yield out
 
     @property
     def io(self):
-        """Generator for challenge inputs/outputs."""
+        """Generator for challenge inputs/outputs.
+
+        Yields
+        ------
+        str | int, str | int
+            The challenges inputs and outputs.
+        """
         for inp, out in zip(self.inputs, self.outputs):
             yield inp, out
