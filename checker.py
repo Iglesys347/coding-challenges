@@ -4,10 +4,25 @@ import os
 import docker
 from docker.errors import ImageNotFound
 
-from handler import DEFAULT_DIR
+from settings import DEFAULT_DIR
 
 
 def check_script(script_name, challenge):
+    """Run script with the challenges inputs and compare the script outputs with the expected
+    challenges outputs.
+
+    Parameters
+    ----------
+    script_name : str
+        The name of the script to check.
+    challenge : Challenge
+        The challenge that the script should solve.
+
+    Returns
+    -------
+    int
+        The score of the script for the challenge. 0 =< score =< challenge.max_score.
+    """
     score = 0
     client = docker.APIClient()
 
