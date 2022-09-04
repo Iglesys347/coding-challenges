@@ -9,11 +9,11 @@ This scripts does the following 3 things:
 from subprocess import DEVNULL, STDOUT, CalledProcessError, check_call
 import redis
 
-from bot import run_bot
-from db_utils import check_db_running
-from errors import DockerError, RedisError
+from codchal.bot import run_bot
+from codchal.db_utils import check_db_running
+from codchal.errors import DockerError, RedisError
 
-from settings import REDIS_HOST, REDIS_PORT, REDIS_DB
+from codchal.settings import REDIS_HOST, REDIS_PORT, REDIS_DB
 
 # checking that docker and redis are installed
 try:

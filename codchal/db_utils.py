@@ -1,10 +1,9 @@
 """Module containing utils function to manipulate the DB."""
 
-import redis
 from redis.exceptions import ConnectionError
 
-from errors import RedisError
-from settings import REDIS_DB, REDIS_HOST, REDIS_PORT, REDIS_HASH_KEY
+from codchal.errors import RedisError
+from codchal.settings import REDIS_DB, REDIS_HOST, REDIS_PORT, REDIS_HASH_KEY
 
 
 def check_db_running(client):
