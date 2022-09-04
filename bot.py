@@ -28,13 +28,23 @@ bot = commands.Bot(commands.when_mentioned_or("!"), intents=intents,
                    description="Coding challenges Discord bot.")
 
 
-@bot.command(help="Select and start a random challenge.")
+@bot.command(help="Select and start a random challenge")
 async def challenge(ctx):
+    """Select a random challenge and wait for the user solution."""
     def random_challenge():
+        """Select random challenge from json challenges files in `CHALLENGES_DIR`."""
         chal_id = choice(os.listdir(CHALLENGES_DIR)).split(".")[0]
         return Challenge(chal_id, CHALLENGES_DIR)
 
     def check(mess):
+        """Check that a message is well formed for solution.
+        
+        The message must match the 4 conditions to be considered as a solution:
+            - message is not written by the bot itself
+            - message starts with '```'
+            - message written in the same challenge as the command !challenge
+            - message written by the same user than the one who used the command !challenge
+        """
         return mess.author != bot.user and mess.content.startswith("```") \
             and mess.channel == ctx.channel and mess.author == ctx.author
 
@@ -73,8 +83,9 @@ async def challenge(ctx):
     # await ctx.send(elt)
 
 
-@bot.command(help="Display the user's amount of XP.")
+@bot.command(help="Display the user's amount of XP")
 async def xp(ctx):
+    """Display the use's amount of XP."""
     user_id = ctx.message.author.id
     try:
         xp_amount = get_user_xp(redis_client, user_id)
@@ -83,8 +94,9 @@ async def xp(ctx):
         await ctx.send("You haven't completed any challenge! You have 0 points of experience.")
 
 
-@bot.command(help="Display the user's rank.")
+@bot.command(help="Display the user's rank")
 async def rank(ctx):
+    """Display the user's rank."""
     user_id = ctx.message.author.id
     try:
         xp_amount = get_user_xp(redis_client, user_id)
@@ -98,6 +110,7 @@ async def rank(ctx):
 
 
 def xp_to_rank(xp_amount):
+    """Convert an amount of XP into a rank using `RANKS_FILE` correspondance."""
     with open(RANKS_FILE, "r", encoding="utf8") as file:
         ranks = json.load(file)
     for rank_name in ranks:
@@ -107,6 +120,7 @@ def xp_to_rank(xp_amount):
 
 
 def run_bot():
+    """Run the bot."""
     # read bot token
     with open(".token", "r", encoding="utf8") as file:
         token = file.read()
