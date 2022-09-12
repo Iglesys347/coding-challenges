@@ -11,7 +11,7 @@ FAKE_USER = {"id": "1234",
 
 
 @pytest.fixture
-def empty_redis_client():
+def empty_redis():
     # using default settings
     client = redis.Redis(decode_responses=True)
     return client
