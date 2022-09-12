@@ -6,7 +6,7 @@ from codchal import db_utils as du
 from codchal.settings import REDIS_HASH_KEY
 from codchal.errors import RedisError
 
-FAKE_USER = {"id": 1234,
+FAKE_USER = {"id": "1234",
              "xp": 10}
 
 
@@ -60,8 +60,7 @@ def test_db_utils_get_user_xp_with_user_id(redis_client):
 
 
 def test_db_utils_get_user_xp_without_user_id(redis_client):
-    assert du.get_user_xp(redis_client, FAKE_USER["id"]) == {
-        FAKE_USER["id"]: FAKE_USER["xp"]}
+    assert du.get_user_xp(redis_client) == {FAKE_USER["id"]: FAKE_USER["xp"]}
 
 
 def test_db_utils_get_user_xp_user_nexist_exception(empty_redis):
@@ -71,8 +70,8 @@ def test_db_utils_get_user_xp_user_nexist_exception(empty_redis):
 
 def test_db_utils_del_user(redis_client):
     # check that the user exist before deletion
-    assert redis_client.hget(
-        REDIS_HASH_KEY, FAKE_USER["id"]) == FAKE_USER["xp"]
+    assert int(redis_client.hget(
+        REDIS_HASH_KEY, FAKE_USER["id"])) == FAKE_USER["xp"]
     assert du.del_user(redis_client, FAKE_USER["id"]) == True
     # check that the user does not exist anymore
     assert redis_client.hexists(REDIS_HASH_KEY, FAKE_USER["id"]) == False
@@ -85,7 +84,7 @@ def test_db_utils_del_user_user_nexist_exception(empty_redis):
 
 def test_db_utils_add_xp(redis_client):
     amount = 10
-    assert du.add_xp(redis_client, FAKE_USER["id"]) == True
+    assert du.add_xp(redis_client, FAKE_USER["id"], amount) == True
     # checking the xp has been updated
     assert int(redis_client.hget(REDIS_HASH_KEY,
                FAKE_USER["id"])) == FAKE_USER["xp"] + amount
@@ -93,4 +92,4 @@ def test_db_utils_add_xp(redis_client):
 
 def test_db_utils_add_xp_user_nexists_exception(empty_redis):
     with pytest.raises(RedisError):
-        du.add_xp(empty_redis, FAKE_USER["id"])
+        du.add_xp(empty_redis, FAKE_USER["id"], 10)
