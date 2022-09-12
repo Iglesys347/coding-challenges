@@ -94,3 +94,44 @@ def test_db_utils_add_xp(redis_client):
 def test_db_utils_add_xp_user_nexists_exception(empty_redis):
     with pytest.raises(RedisError):
         du.add_xp(empty_redis, FAKE_USER["id"], 10)
+
+
+def test_db_utils_remove_xp(redis_client):
+    amount = 5
+    assert du.remove_xp(redis_client, FAKE_USER["id"], amount) == True
+    # checking the xp has been updated
+    assert int(redis_client.hget(REDIS_HASH_KEY,
+               FAKE_USER["id"])) == FAKE_USER["xp"] - amount
+
+
+def test_db_utils_remove_xp_user_nexists_exception(empty_redis):
+    with pytest.raises(RedisError):
+        du.add_xp(empty_redis, FAKE_USER["id"], 5)
+
+
+def test_db_utils_reset_xp(redis_client):
+    assert du.reset_xp(redis_client, FAKE_USER["id"]) == True
+    # checking the xp has been updated
+    assert int(redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])) == 0
+
+
+def test_db_utils_reset_xp_without_user_id(redis_client):
+    # adding another user to the client
+    redis_client.hset(REDIS_HASH_KEY, "tmp_user", 10)
+    assert du.reset_xp(redis_client) == True
+    # checking the xp has been updated
+    assert int(redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])) == 0
+    assert int(redis_client.hget(REDIS_HASH_KEY, "tmp_user")) == 0
+
+
+def test_db_utils_add_xp_user_nexists_exception(empty_redis):
+    with pytest.raises(RedisError):
+        du.reset_xp(empty_redis, FAKE_USER["id"])
+
+
+def test_db_utils_flush(redis_client):
+    assert int(redis_client.hget(REDIS_HASH_KEY,
+               FAKE_USER["id"])) == FAKE_USER["xp"]
+    du.flush(redis_client)
+    with pytest.raises(RedisError):
+        redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])
