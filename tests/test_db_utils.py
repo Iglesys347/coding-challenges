@@ -125,7 +125,7 @@ def test_db_utils_reset_xp_without_user_id(redis_client):
     assert int(redis_client.hget(REDIS_HASH_KEY, "tmp_user")) == 0
 
 
-def test_db_utils_add_xp_user_nexists_exception(empty_redis):
+def test_db_utils_reset_xp_user_nexists_exception(empty_redis):
     with pytest.raises(RedisError):
         du.reset_xp(empty_redis, FAKE_USER["id"])
 
