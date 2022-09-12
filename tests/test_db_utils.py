@@ -1,6 +1,6 @@
 import pytest
 import redis
-from redis.exceptions import ConnectionError
+from redis.exceptions import DataError
 
 from codchal import db_utils as du
 from codchal.settings import REDIS_HASH_KEY
@@ -129,4 +129,4 @@ def test_db_utils_flush(redis_client):
     assert redis_client.hget(
         REDIS_HASH_KEY, FAKE_USER["id"]) == FAKE_USER["xp"]
     du.flush(redis_client)
-    redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])
+    print(redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"]))
