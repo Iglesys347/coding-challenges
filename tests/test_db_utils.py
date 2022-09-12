@@ -14,6 +14,7 @@ FAKE_USER = {"id": "1234",
 def empty_redis():
     # using default settings
     client = redis.Redis(decode_responses=True)
+    client.flushall()
     return client
 
 
