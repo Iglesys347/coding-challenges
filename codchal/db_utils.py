@@ -176,7 +176,7 @@ def reset_xp(client, user_id=None):
     """
     if user_id is None:
         for user in get_users(client):
-            reset_xp(user)
+            reset_xp(client, user_id=user)
     return bool(client.hset(REDIS_HASH_KEY, user_id, 0))
 
 

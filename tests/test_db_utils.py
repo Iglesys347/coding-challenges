@@ -7,7 +7,7 @@ from codchal.settings import REDIS_HASH_KEY
 from codchal.errors import RedisError
 
 FAKE_USER = {"id": "1234",
-             "xp": 10}
+             "xp": "10"}
 
 
 @pytest.fixture
@@ -71,8 +71,8 @@ def test_db_utils_get_user_xp_user_nexist_exception(empty_redis):
 
 def test_db_utils_del_user(redis_client):
     # check that the user exist before deletion
-    assert int(redis_client.hget(
-        REDIS_HASH_KEY, FAKE_USER["id"])) == FAKE_USER["xp"]
+    assert redis_client.hget(
+        REDIS_HASH_KEY, FAKE_USER["id"]) == FAKE_USER["xp"]
     assert du.del_user(redis_client, FAKE_USER["id"]) == True
     # check that the user does not exist anymore
     assert redis_client.hexists(REDIS_HASH_KEY, FAKE_USER["id"]) == False
@@ -87,8 +87,8 @@ def test_db_utils_add_xp(redis_client):
     amount = 10
     assert du.add_xp(redis_client, FAKE_USER["id"], amount) == True
     # checking the xp has been updated
-    assert int(redis_client.hget(REDIS_HASH_KEY,
-               FAKE_USER["id"])) == FAKE_USER["xp"] + amount
+    assert redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"]) == str(
+        int(FAKE_USER["xp"]) + amount)
 
 
 def test_db_utils_add_xp_user_nexists_exception(empty_redis):
@@ -100,8 +100,8 @@ def test_db_utils_remove_xp(redis_client):
     amount = 5
     assert du.remove_xp(redis_client, FAKE_USER["id"], amount) == True
     # checking the xp has been updated
-    assert int(redis_client.hget(REDIS_HASH_KEY,
-               FAKE_USER["id"])) == FAKE_USER["xp"] - amount
+    assert redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"]) == str(
+        int(FAKE_USER["xp"]) - amount)
 
 
 def test_db_utils_remove_xp_user_nexists_exception(empty_redis):
@@ -130,8 +130,8 @@ def test_db_utils_add_xp_user_nexists_exception(empty_redis):
 
 
 def test_db_utils_flush(redis_client):
-    assert int(redis_client.hget(REDIS_HASH_KEY,
-               FAKE_USER["id"])) == FAKE_USER["xp"]
+    assert redis_client.hget(
+        REDIS_HASH_KEY, FAKE_USER["id"]) == FAKE_USER["xp"]
     du.flush(redis_client)
     with pytest.raises(RedisError):
         redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])
