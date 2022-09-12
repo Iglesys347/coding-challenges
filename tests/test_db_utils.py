@@ -27,8 +27,8 @@ def redis_client():
     return client
 
 
-def test_db_utils_check_db_running(empty_redis_client):
-    assert du.check_db_running(empty_redis_client) == True
+def test_db_utils_check_db_running(empty_redis):
+    assert du.check_db_running(empty_redis) == True
 
 
 def test_db_utils_check_db_not_running():
@@ -38,7 +38,7 @@ def test_db_utils_check_db_not_running():
 
 
 def test_db_utils_add_user(empty_redis):
-    assert du.add_user(empty_redis, FAKE_USER["id"]) == 1
+    assert int(du.add_user(empty_redis, FAKE_USER["id"])) == 1
     # testing that the user is well added
     assert empty_redis.hget(REDIS_HASH_KEY, FAKE_USER["id"]) == 0
 

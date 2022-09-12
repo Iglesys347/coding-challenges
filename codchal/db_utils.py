@@ -80,7 +80,6 @@ def get_users(client):
     return client.hkeys(REDIS_HASH_KEY)
 
 
-@check_user_exists
 def get_user_xp(client, user_id=None):
     """Return the XP amount of an user or if user not specified of all users.
 
@@ -99,6 +98,8 @@ def get_user_xp(client, user_id=None):
     """
     if user_id is None:
         return client.hgetall(REDIS_HASH_KEY)
+    if not client.hexists(REDIS_HASH_KEY, user_id) and user_id is not None:
+        raise RedisError(f"User with ID {user_id} does not exists.")
     return int(client.hget(REDIS_HASH_KEY, user_id))
 
 
@@ -163,7 +164,6 @@ def remove_xp(client, user_id, xp):
     return bool(client.hincrby(REDIS_HASH_KEY, user_id, -xp))
 
 
-@check_user_exists
 def reset_xp(client, user_id=None):
     """Set the xp to 0 of the specified user or for all users by default.
 
@@ -177,7 +177,7 @@ def reset_xp(client, user_id=None):
     if user_id is None:
         for user in get_users(client):
             reset_xp(user)
-    return client.hset(REDIS_HASH_KEY, user_id, 0)
+    return bool(client.hset(REDIS_HASH_KEY, user_id, 0))
 
 
 def flush(client):
