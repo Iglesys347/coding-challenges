@@ -29,7 +29,7 @@ def check_db_running(client):
 # Defining some usefull decorators
 def check_user_exists(func):
     """Decorator function to check if user exists in DB."""
-    def inner(client, user_id, *args, **kargs):
+    def inner(client, user_id=None, *args, **kargs):
         if not client.hexists(REDIS_HASH_KEY, user_id) and user_id is not None:
             raise RedisError(f"User with ID {user_id} does not exists.")
         return func(client, user_id, *args, **kargs)
