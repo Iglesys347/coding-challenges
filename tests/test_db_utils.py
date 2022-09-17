@@ -116,15 +116,6 @@ def test_db_utils_reset_xp(redis_client):
     assert int(redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])) == 0
 
 
-def test_db_utils_reset_xp_without_user_id(redis_client):
-    # adding another user to the client
-    redis_client.hset(REDIS_HASH_KEY, "tmp_user", 10)
-    du.reset_xp(redis_client)
-    # checking the xp has been updated
-    assert int(redis_client.hget(REDIS_HASH_KEY, FAKE_USER["id"])) == 0
-    assert int(redis_client.hget(REDIS_HASH_KEY, "tmp_user")) == 0
-
-
 def test_db_utils_flush(redis_client):
     assert redis_client.hget(
         REDIS_HASH_KEY, FAKE_USER["id"]) == FAKE_USER["xp"]

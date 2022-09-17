@@ -164,8 +164,8 @@ def remove_xp(client, user_id, xp):
     return bool(client.hincrby(REDIS_HASH_KEY, user_id, -xp))
 
 
-def reset_xp(client, user_id=None):
-    """Set the xp to 0 of the specified user or for all users by default.
+def reset_xp(client, user_id):
+    """Set the xp to 0 of the specified user.
 
     Parameters
     ----------
@@ -174,9 +174,6 @@ def reset_xp(client, user_id=None):
     user_id : str, default=None
         The user ID.
     """
-    if user_id is None:
-        for user in get_users(client):
-            reset_xp(client, user_id=user)
     return bool(client.hset(REDIS_HASH_KEY, user_id, 0))
 
 
