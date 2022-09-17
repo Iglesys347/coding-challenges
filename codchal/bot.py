@@ -7,13 +7,13 @@ import discord
 from discord.ext import commands
 import redis
 
-from challenge import Challenge
-from errors import RedisError
-from db_utils import add_user, add_xp, get_user_xp
-from handler import SolHandler
-from checker import check_script
+from codchal.challenge import Challenge
+from codchal.errors import RedisError
+from codchal.db_utils import add_user, add_xp, get_user_xp
+from codchal.handler import SolHandler
+from codchal.checker import check_script
 
-from settings import (CHALLENGES_DIR, DIFFICULTY_COLOR_MAP,
+from codchal.settings import (CHALLENGES_DIR, DIFFICULTY_COLOR_MAP,
                       DIFFICULTY_XP_MAP, REDIS_DB, REDIS_HOST, REDIS_PORT, RANKS_FILE)
 
 intents = discord.Intents.default()

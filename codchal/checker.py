@@ -4,7 +4,7 @@ import os
 import docker
 from docker.errors import ImageNotFound
 
-from settings import DEFAULT_DIR
+from codchal.settings import DEFAULT_DIR
 
 
 def check_script(script_name, challenge):

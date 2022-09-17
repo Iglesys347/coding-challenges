@@ -4,8 +4,8 @@ import os
 import re
 import uuid
 
-from errors import LanguageError, SolutionFormatError
-from settings import FILE_EXT, DEFAULT_DIR, KNOWN_LANG
+from codchal.errors import LanguageError, SolutionFormatError
+from codchal.settings import FILE_EXT, DEFAULT_DIR, KNOWN_LANG
 
 
 class SolHandler():
